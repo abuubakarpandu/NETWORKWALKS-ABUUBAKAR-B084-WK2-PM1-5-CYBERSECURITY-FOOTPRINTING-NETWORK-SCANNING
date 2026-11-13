@@ -249,7 +249,7 @@ This practical cybersecurity project successfully integrated two important stage
 
 ---
 
-**EVIDENCE**
+🔍 **EVIDENCE**
 
 ---
 
@@ -400,3 +400,73 @@ Comprehensive DNS mapping exposes mail server routing, cPanel hosting dependenci
 ---
 
 
+#  Nmap & Zenmap Network Scanning (Kali Linux)
+
+## Summary Evidence Overview
+---
+
+This lab focused on using Nmap and Zenmap on Kali Linux to perform local network discovery and visualize network connectivity.
+
+---
+
+### Task 1: Download & Install Zenmap
+
+Successfully downloaded and installed Zenmap and Nmap from the official Kali Linux repositories using package management tools.
+
+---
+
+### Task 2: Find Local IP Address & LAN Subnet
+
+Used the `ip a` command to identify the local network interface, IP address, and subnet mask.
+
+- **Local IP Address:** `10.0.0.__`
+- **LAN Subnet:** `10.0.0.0/__`
+
+---
+### Task 3: Find the List of Live Hosts / PCs in the IP Subnet
+
+Launched Zenmap, entered the discovered LAN subnet, and selected the Ping Scan profile to identify active devices on the network.
+---
+### Task 4: How Many Hosts Are Live in Your Subnet?
+
+Analyzed the Nmap scan summary to determine the total number of responsive hosts, including the local scanning machine.
+
+- **Total Live Hosts:** `___`
+---
+### Task 5: What Are the IP Addresses of the Live Hosts?
+
+Identified the IP addresses assigned to the active devices discovered during the scan.
+
+- **Host 1:** `10.0.0.__`
+- **Host 2:** `10.0.0.__`
+---
+### Task 6: What Are the MAC Addresses of the Live Hosts?
+
+Identified the MAC addresses associated with the discovered network interfaces.
+
+- **Host 1 MAC:** `__:__:__:__:__:__`
+- **Host 2 (Local PC) MAC:** `__:__:__:__:__:__`
+---
+### Task 7: Display & Save the Output Topology in PDF Format
+
+Opened the Topology tab in Zenmap, reviewed the Topology Legend, and saved the graphical network layout in PDF format.
+---
+### Final Evidence
+
+The screenshot below provides a visual overview of the Nmap and Zenmap network scanning results, demonstrating the successful completion of the lab tasks.
+
+![Nmap and Zenmap Network Scanning - Final Evidence](evi001/zmapresult.png)
+---
+
+---
+
+## 👨‍💻  Author
+
+**Abuubakar Ramadhan Pandu**
+- **🎓 Field:** Digital Forensic Engineering
+- **🔐 Interest:** Cybersecurity | Network Security | Penetration Testing
+- **🏫 Program:** NetworkWalks Cybersecurity Training
+- **📌 Project:** `W2-PM-FINAL` – Footprinting & Network Scanning
+- **📅 Date:** 13 November 2026
+
+---
