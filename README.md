@@ -246,3 +246,157 @@ Based on the observations, the following security improvements are recommended:
 ## 8. Conclusion
 
 This practical cybersecurity project successfully integrated two important stages of penetration testing: External Footprinting & Reconnaissance and Internal Network Scanning & Discovery.
+
+---
+
+**EVIDENCE**
+
+---
+
+## 1. Domain Registration & Ownership Analysis
+
+Public domain registration databases are queried to establish administrative ownership, registrar details, and name server delegation.
+
+**Command Executed:**
+```bash
+whois networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **Registrar:** GoDaddy.com, LLC
+- **Registration Timeline:** Created on 2019-11-06 and set to expire on 2027-11-06
+- **Delegated Name Servers:** NS6135.HOSTGATOR.COM and NS6136.HOSTGATOR.COM
+- **Domain Status:** Protected with `clientDeleteProhibited`, `clientRenewProhibited`, `clientTransferProhibited`, and `clientUpdateProhibited` flags
+- **DNSSEC Status:** Unsigned
+
+**Operational Conclusion:**
+
+This intelligence confirms domain ownership boundaries, identifies HostGator as the underlying DNS hosting provider, and establishes administrative contact vectors.
+
+![WHOIS Domain Registration Analysis](evi001/whois.png)
+
+---
+
+## 2. Web Technology & Application Fingerprinting
+
+Web fingerprinting is performed to identify the underlying server stack, content management systems, plugins, and client-side frameworks deployed on the target.
+
+**Command Executed:**
+```bash
+whatweb networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **Web Server:** Apache
+- **Content Management System (CMS):** WordPress 7.1.4
+- **Detected Plugins:** WordPress Download Manager 3.3.76
+- **Frontend Frameworks:** Bootstrap 7.1.4 and jQuery 3.7.1
+- **Hosting Location & IP:** 192.232.216.135 (United States)
+- **Exposed Contact Vector:** info@networkwalks.com
+
+**Operational Conclusion:**
+
+Exposing exact software and plugin versions enables precise cross-referencing against public vulnerability databases (CVEs) to identify known security flaws.
+
+![WhatWeb Technology Fingerprinting](evi001/whatweb.png)
+
+---
+
+## 3. Infrastructure Resolution & IP Mapping
+
+Domain Name System (DNS) resolution is executed to translate the human-readable domain name into its numeric network-layer IPv4 address.
+
+**Command Executed:**
+```bash
+nslookup networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **DNS Resolver Queried:** 8.8.8.8 (Port 53)
+- **Resolved IPv4 Address:** 192.232.216.135 (Non-authoritative answer)
+
+**Operational Conclusion:**
+
+Resolving the public IP address allows direct network-level reconnaissance, port scanning, and reverse-IP lookups to identify co-hosted applications on the same server infrastructure.
+
+![NSLookup DNS Resolution](evi001/nslookup.png)
+
+---
+
+## 4. HTTP Response Header Inspection
+
+HTTP headers are retrieved directly without downloading the full webpage body to inspect server banners, caching layers, security policies, and hidden application endpoints.
+
+**Command Executed:**
+```bash
+curl -I https://networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **HTTP Status:** HTTP/1.1 200 OK
+- **Server Banner:** Apache
+- **Caching Mechanism:** X-nginx-cache: WordPress and X-Endurance-Cache-Level: 0
+- **Exposed API Endpoint:** WordPress REST API exposed via Link header (https://networkwalks.com/wp-json/)
+- **Cookie Security:** `__wpdm_client` configured with secure and HttpOnly attributes
+- **Security Policies:** Permissions-Policy and Referrer-Policy headers active
+
+**Operational Conclusion:**
+
+Response header inspection uncovers backend caching architecture and hidden REST API endpoints (`/wp-json/`), providing structural entry points for further web application testing.
+
+![HTTP Response Header Inspection](evi001/curl%20-I.png)
+
+---
+
+## 5. Web Application Firewall (WAF) Detection
+
+Defensive perimeter detection is conducted to determine whether incoming HTTP traffic is monitored or filtered by a Web Application Firewall.
+
+**Command Executed:**
+```bash
+wafw00f https://networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **WAF Detection Result:** Positive (ModSecurity (SpiderLabs))
+- **Probes Sent:** 2 requests
+
+**Operational Conclusion:**
+
+Confirming the presence of ModSecurity indicates that automated or noisy payload injections may be logged or blocked. Further testing should follow the authorized testing scope and avoid unnecessary traffic.
+
+![WAF Detection](evi001/wafw00f.png)
+
+---
+
+## 6. Comprehensive DNS Enumeration
+
+Full DNS enumeration is performed to map mail exchangers, name server software versions, security policies, and service autodiscovery records.
+
+**Command Executed:**
+```bash
+dnsrecon -d networkwalks.com
+```
+
+**Key Findings & Observations:**
+
+- **SOA & NS Records:** ns6135.hostgator.com (50.87.144.87) and ns6136.hostgator.com (192.232.216.131)
+- **DNS Server Version Exposed:** BIND 9.16.23-RH
+- **Mail Exchanger (MX):** mail.networkwalks.com (192.232.216.135)
+- **TXT & SPF Records:** Google site verification token and SPF policy (`v=spf1 +a +mx +ip4:50.87.144.87 +include:websitewelcome.com ~all`)
+- **Service Records (SRV):** 8 cPanel autodiscovery records (`_autodiscover._tcp.networkwalks.com` pointing to `cpanelemaildiscovery.cpanel.net` on port 443)
+
+**Operational Conclusion:**
+
+Comprehensive DNS mapping exposes mail server routing, cPanel hosting dependencies, SPF email spoofing protections, and exact DNS daemon versions (BIND 9.16.23-RH), completing the external infrastructure profile.
+
+![DNSRecon Enumeration](evi001/dnsrecon%20-d.png)
+
+---
+
+
